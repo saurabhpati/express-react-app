@@ -34,3 +34,21 @@ export function* taskModificationSaga() {
         });
     }
 }
+
+export function* userAuthenticationSaga() {
+    while (true) {
+        const { username, password } = yield take(mutations.REQUEST_AUTHENTICATE_USER);
+
+        try {
+            const data = yield axios.post(`${url}/authenticate`, { username, password });
+            // yield put(mutations.PROCESSING_AUTHENTICATE_USER);
+
+            if (!data) {
+                throw new Error("Username or password is incorrect.");
+            }
+        } catch (error) {
+            console.log("Can't authenticate the user, ", error);
+            yield put(mutations.processingAuthenticateUser(mutations.NOT_AUTHENTICATED))
+        }
+    }
+}
