@@ -3,10 +3,13 @@ import { defaultState } from "./defaultState";
 
 async function initializeDb() {
     const db = await connectDb();
-    
-    for (const collectionName in defaultState) {
-        const collection = db.collection(collectionName);
-        await collection.insertMany(defaultState[collectionName]);
+    const defaultUser = db.collection("users").findOne({id: "U1"});
+
+    if (!defaultUser) {
+        for (const collectionName in defaultState) {
+            const collection = db.collection(collectionName);
+            await collection.insertMany(defaultState[collectionName]);
+        }
     }
 }
 
