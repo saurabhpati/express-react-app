@@ -1,5 +1,6 @@
 import { take, put, select } from "redux-saga/effects";
 import uuid from "uuid";
+import { history } from "./history";
 import * as mutations from "./mutations";
 import axios from "axios";
 
@@ -40,12 +41,17 @@ export function* userAuthenticationSaga() {
         const { username, password } = yield take(mutations.REQUEST_AUTHENTICATE_USER);
 
         try {
-            const data = yield axios.post(`${url}/authenticate`, { username, password });
-            // yield put(mutations.PROCESSING_AUTHENTICATE_USER);
+            const { data } = yield axios.post(`${url}/authenticate`, { username, password });
 
             if (!data) {
                 throw new Error("Username or password is incorrect.");
             }
+
+            console.log(data);
+            yield put(mutations.setState(data.state));
+            yield put(mutations.processingAuthenticateUser(mutations.AUTHENTICATED, data.state.session));
+            history.push("/dashboard");
+
         } catch (error) {
             console.log("Can't authenticate the user, ", error);
             yield put(mutations.processingAuthenticateUser(mutations.NOT_AUTHENTICATED))

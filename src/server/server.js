@@ -2,6 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import { connectDb } from "./connect-db";
+import { authenticate } from "./authenticate";
 
 const app = express();
 const port = process.env.port || 5000;
@@ -11,6 +12,8 @@ app.use(
     bodyParser.urlencoded({ extended: true }),
     bodyParser.json()
 );
+
+authenticate(app);
 
 export const addNewTask = async task => {
     const db = await connectDb();

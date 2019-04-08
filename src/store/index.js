@@ -19,12 +19,15 @@ export const store = createStore(
                 case mutations.PROCESSING_AUTHENTICATE_USER:
                     return { ...userSession, authenticated };
 
+                case mutations.SET_STATE:
+                    return { ...userSession, id: action.state.session.id, authenticated: action.state.session.authenticated };
+
                 default:
                     return userSession;
             }
 
         },
-        tasks(tasks = defaultState.tasks, action) {
+        tasks(tasks = [], action) {
             switch (action.type) {
                 case mutations.CREATE_TASK:
                     return [...tasks, {
@@ -77,19 +80,28 @@ export const store = createStore(
                         return acc;
                     }, []);
 
+                case mutations.SET_STATE:
+                    return [...action.state.tasks];
+
                 default:
                     break;
             }
 
             return tasks;
         },
-        groups(groups = defaultState.groups, action) {
-            return groups;
+        groups(groups = [], action) {
+            switch (action.type) {
+                case mutations.SET_STATE:
+                    return [...action.state.groups];
+
+                default:
+                    return groups;
+            }
         },
-        comments(comments = defaultState.comments, action) {
+        comments(comments = [], action) {
             return comments;
         },
-        users(users = defaultState.users, action) {
+        users(users = [], action) {
             return users;
         },
     }),

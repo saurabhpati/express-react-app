@@ -8,7 +8,7 @@ const Login = ({ authenticated, authenticate }) => {
             Please Login.
         </h2>
         <form onSubmit={authenticate}>
-            <input type="text" placeholder="username" defaultValue="dev" name="username"></input>
+            <input type="text" placeholder="username" defaultValue="Dev" name="username"></input>
             <input type="password" placeholder="password" defaultValue="" name="password"></input>
             <button type="submit">Login</button>
         </form>
